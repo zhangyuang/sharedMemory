@@ -1,10 +1,10 @@
 {
-  "name": "share-memory",
+  "name": "sharedmemory-rs",
   "version": "0.0.0",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "share-memory",
+    "name": "sharedmemory-rs",
     "triples": {
       "additional": [
         "aarch64-apple-darwin",
@@ -16,7 +16,8 @@
   "license": "MIT",
   "devDependencies": {
     "@napi-rs/cli": "^2.15.2",
-    "ava": "^5.1.1"
+    "ava": "^5.1.1",
+    "koa": "^2.14.2"
   },
   "ava": {
     "timeout": "3m"
@@ -32,8 +33,5 @@
     "test": "ava",
     "universal": "napi universal",
     "version": "napi version"
-  },
-  "dependencies": {
-    "koa": "^2.14.2"
   }
 }

@@ -197,3 +197,4 @@ Cargo.lock
 *.node
 yarn.lock
 target
+*.link

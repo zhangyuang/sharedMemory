@@ -252,7 +252,9 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { setFunc, createShareMemory } = nativeBinding
+const { getString, setString, init, clear } = nativeBinding
 
-module.exports.setFunc = setFunc
-module.exports.createShareMemory = createShareMemory
+module.exports.getString = getString
+module.exports.setString = setString
+module.exports.init = init
+module.exports.clear = clear
