@@ -90,6 +90,10 @@ jobs:
         with:
           version: 0.10.1
       - name: Setup toolchain
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
@@ -97,10 +101,6 @@ jobs:
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         run: pnpm config set supportedArchitectures.cpu "ia32"
         shell: bash
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - name: Install dependencies
         run: pnpm i
       - name: Setup node x86
@@ -144,6 +144,10 @@ jobs:
           - '18'
     runs-on: ${{ matrix.settings.host }}
     steps:
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
@@ -151,10 +155,6 @@ jobs:
           node-version: ${{ matrix.node }}
           check-latest: true
           cache: pnpm
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - name: Install dependencies
         run: pnpm i
       - name: Download artifacts
@@ -180,6 +180,10 @@ jobs:
           - '18'
     runs-on: ubuntu-latest
     steps:
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
@@ -187,10 +191,6 @@ jobs:
           node-version: ${{ matrix.node }}
           check-latest: true
           cache: pnpm
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - name: Install dependencies
         run: pnpm i
       - name: Download artifacts
@@ -218,6 +218,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Download artifacts
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
         uses: actions/download-artifact@v3
         with:
           name: bindings-aarch64-unknown-linux-gnu
@@ -225,10 +229,6 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - name: Install dependencies
         run: |
           pnpm config set supportedArchitectures.cpu "arm64"
@@ -256,6 +256,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Download artifacts
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
         uses: actions/download-artifact@v3
         with:
           name: bindings-aarch64-unknown-linux-musl
@@ -263,10 +267,6 @@ jobs:
       - name: List packages
         run: ls -R .
         shell: bash
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - name: Install dependencies
         run: |
           pnpm config set supportedArchitectures.cpu "arm64"
@@ -294,6 +294,10 @@ jobs:
       - test-linux-aarch64-gnu-binding
       - test-linux-aarch64-musl-binding
     steps:
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
@@ -301,10 +305,6 @@ jobs:
           node-version: 18
           check-latest: true
           cache: pnpm
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - name: Install dependencies
         run: pnpm i
       - name: Download all artifacts
