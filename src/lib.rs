@@ -52,7 +52,8 @@ fn get_string(mem_id: String) -> Result<String> {
 fn set_string(mem_id: String, js_string: String) {
   unsafe {
     let shmem = if metadata(&mem_id).is_ok() {
-      let old_data = ShmemConf::new().size(4096).flink(&mem_id).open().unwrap();
+      let old_data = ShmemConf::new().size(0).flink(&mem_id).open().unwrap();
+      println!("{}", old_data.len());
       std::ptr::write_bytes(old_data.as_ptr(), 0, old_data.len());
       old_data
     } else {
