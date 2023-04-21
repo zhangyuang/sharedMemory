@@ -1,10 +1,10 @@
 {
-  "name": "sharedmemory-rs",
+  "name": "share-memory",
   "version": "0.0.0",
   "main": "index.js",
   "types": "index.d.ts",
   "napi": {
-    "name": "sharedmemory-rs",
+    "name": "share-memory",
     "triples": {
       "additional": [
         "aarch64-apple-darwin",

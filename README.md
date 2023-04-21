@@ -1,6 +1,6 @@
 # 在 Node.js 不同进程间共享内存
 
-`sharedmemory-rs` 是一个由 `Rust + Napi` 开发，可以在 `Node.js` 不同进程中共享 `String|Object|Function` 内存的模块。
+`share-memory` 是一个由 `Rust + Napi` 开发，可以在 `Node.js` 不同进程中共享 `String|Object|Function` 内存的模块。
 
 ## 支持的功能
 
@@ -20,7 +20,7 @@
 // parent.js
 const { fork } = require('child_process')
 
-const sharedMemory = require('sharedmemory-rs')
+const sharedMemory = require('share-memory')
 
 const stringLink = "string.link" // 设置一个内存id memoryId
 
@@ -38,7 +38,7 @@ child.on('message', msg => {
 
 // child.js
 
-const sharedMemory = require('sharedmemory-rs')
+const sharedMemory = require('share-memory')
 process.on("message", msg => {
   if (msg === "ready") {
     console.log('Read shared string in child process', sharedMemory.getString("string.link"))
@@ -50,7 +50,7 @@ process.on("message", msg => {
 ```
 # shared memory for Node.js Process by Rust Napi
 
-`sharedmemory-rs` is a module developed using Rust + Napi that allows sharing String|Object|Function memory between different processes in Node.js.
+`share-memory` is a module developed using Rust + Napi that allows sharing String|Object|Function memory between different processes in Node.js.
 
 ## Features Implemented
 
@@ -69,7 +69,7 @@ process.on("message", msg => {
 // parent.js
 const { fork } = require('child_process')
 
-const sharedMemory = require('sharedMemory')
+const sharedMemory = require('share-memory')
 
 const stringLink = "string.link" // Set a memory id memoryId
 
@@ -87,7 +87,7 @@ child.on('message', msg => {
 
 // child.js
 
-const sharedMemory = require('sharedMemory')
+const sharedMemory = require('share-memory')
 process.on("message", msg => {
   if (msg === "ready") {
     console.log('Read shared string in child process', sharedMemory.getString("string.link"))

@@ -195,6 +195,6 @@ Cargo.lock
 !.yarn/versions
 
 *.node
-yarn.lock
 target
 *.link
+*.log

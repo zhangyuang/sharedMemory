@@ -1,7 +1,7 @@
 name: CI
 env:
   DEBUG: napi:*
-  APP_NAME: sharedmemory-rs
+  APP_NAME: share-memory
   MACOSX_DEPLOYMENT_TARGET: '10.13'
 'on':
   push:
@@ -26,29 +26,29 @@ jobs:
           - host: macos-latest
             target: x86_64-apple-darwin
             build: |
-              pnpm build
+              yarn build
               strip -x *.node
           - host: windows-latest
-            build: pnpm build
+            build: yarn build
             target: x86_64-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian
             build: |-
               set -e &&
-              pnpm build --target x86_64-unknown-linux-gnu &&
+              yarn build --target x86_64-unknown-linux-gnu &&
               strip *.node
           - host: macos-latest
             target: aarch64-apple-darwin
             build: |
-              pnpm build --target aarch64-apple-darwin
+              yarn build --target aarch64-apple-darwin
               strip -x *.node
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             docker: ghcr.io/napi-rs/napi-rs/nodejs-rust:lts-debian-aarch64
             build: |-
               set -e &&
-              pnpm build --target aarch64-unknown-linux-gnu &&
+              yarn build --target aarch64-unknown-linux-gnu &&
               aarch64-unknown-linux-gnu-strip *.node
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
@@ -56,7 +56,7 @@ jobs:
             build: |-
               set -e &&
               rustup target add aarch64-unknown-linux-musl &&
-              pnpm build --target aarch64-unknown-linux-musl &&
+              yarn build --target aarch64-unknown-linux-musl &&
               /aarch64-linux-musl-cross/bin/aarch64-linux-musl-strip *.node
     name: stable - ${{ matrix.settings.target }} - node@18
     runs-on: ${{ matrix.settings.host }}
@@ -68,7 +68,7 @@ jobs:
         with:
           node-version: 18
           check-latest: true
-          cache: pnpm
+          cache: yarn
       - name: Install
         uses: dtolnay/rust-toolchain@stable
         if: ${{ !matrix.settings.docker }}
@@ -90,26 +90,22 @@ jobs:
         with:
           version: 0.10.1
       - name: Setup toolchain
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
         run: ${{ matrix.settings.setup }}
         if: ${{ matrix.settings.setup }}
         shell: bash
       - name: Setup node x86
         if: matrix.settings.target == 'i686-pc-windows-msvc'
-        run: pnpm config set supportedArchitectures.cpu "ia32"
+        run: yarn config set supportedArchitectures.cpu "ia32"
         shell: bash
       - name: Install dependencies
-        run: pnpm i
+        run: yarn install
       - name: Setup node x86
         uses: actions/setup-node@v3
         if: matrix.settings.target == 'i686-pc-windows-msvc'
         with:
           node-version: 18
           check-latest: true
-          cache: pnpm
+          cache: yarn
           architecture: x86
       - name: Build in docker
         uses: addnab/docker-run-action@v3
@@ -144,19 +140,15 @@ jobs:
           - '18'
     runs-on: ${{ matrix.settings.host }}
     steps:
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-          cache: pnpm
+          cache: yarn
       - name: Install dependencies
-        run: pnpm i
+        run: yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -180,19 +172,15 @@ jobs:
           - '18'
     runs-on: ubuntu-latest
     steps:
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
-          cache: pnpm
+          cache: yarn
       - name: Install dependencies
-        run: pnpm i
+        run: yarn install
       - name: Download artifacts
         uses: actions/download-artifact@v3
         with:
@@ -218,10 +206,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Download artifacts
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
         uses: actions/download-artifact@v3
         with:
           name: bindings-aarch64-unknown-linux-gnu
@@ -231,9 +215,9 @@ jobs:
         shell: bash
       - name: Install dependencies
         run: |
-          pnpm config set supportedArchitectures.cpu "arm64"
-          pnpm config set supportedArchitectures.libc "glibc"
-          pnpm install
+          yarn config set supportedArchitectures.cpu "arm64"
+          yarn config set supportedArchitectures.libc "glibc"
+          yarn install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
@@ -256,10 +240,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Download artifacts
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
         uses: actions/download-artifact@v3
         with:
           name: bindings-aarch64-unknown-linux-musl
@@ -269,9 +249,9 @@ jobs:
         shell: bash
       - name: Install dependencies
         run: |
-          pnpm config set supportedArchitectures.cpu "arm64"
-          pnpm config set supportedArchitectures.libc "musl"
-          pnpm install
+          yarn config set supportedArchitectures.cpu "arm64"
+          yarn config set supportedArchitectures.libc "musl"
+          yarn install
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
         with:
@@ -294,19 +274,15 @@ jobs:
       - test-linux-aarch64-gnu-binding
       - test-linux-aarch64-musl-binding
     steps:
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 6
       - uses: actions/checkout@v3
       - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 18
           check-latest: true
-          cache: pnpm
+          cache: yarn
       - name: Install dependencies
-        run: pnpm i
+        run: yarn install
       - name: Download all artifacts
         uses: actions/download-artifact@v3
         with:
