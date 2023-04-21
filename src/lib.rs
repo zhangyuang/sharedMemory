@@ -2,11 +2,10 @@
 extern crate napi_derive;
 #[macro_use]
 extern crate lazy_static;
-use napi::sys::napi_value__;
 use napi::{Env, JsNull, JsObject, NapiRaw, NapiValue, Result};
 use std::collections::HashMap;
+use std::fs::metadata;
 use std::mem::{self, transmute};
-use std::sync::{Arc, Mutex};
 
 use shared_memory::{Shmem, ShmemConf};
 
@@ -50,14 +49,23 @@ fn get_string(mem_id: String) -> Result<String> {
 }
 
 #[napi]
-fn set_string(mem_id: String, callback: String) {
+fn set_string(mem_id: String, js_string: String) {
   unsafe {
-    let shmem = ShmemConf::new().size(4096).flink(&mem_id).create().unwrap();
+    let shmem = if metadata(&mem_id).is_ok() {
+      let old_data = ShmemConf::new().size(4096).flink(&mem_id).open().unwrap();
+      std::ptr::write_bytes(old_data.as_ptr(), 0, old_data.len());
+      old_data
+    } else {
+      ShmemConf::new().size(4096).flink(&mem_id).create().unwrap()
+    };
     let ptr = shmem.as_ptr();
-    let len = std::cmp::min(callback.len(), shmem.len());
-    std::ptr::copy(callback.as_ptr(), ptr, len);
-    let global_shmem = SHMEM.as_mut().unwrap();
-    global_shmem.insert(mem_id, shmem);
+    std::ptr::copy(js_string.as_ptr(), ptr, js_string.len());
+    if SHMEM.is_some() {
+      let global_shmem = SHMEM.as_mut().unwrap();
+      if global_shmem.get(&mem_id).is_none() {
+        global_shmem.insert(mem_id, shmem);
+      }
+    }
   }
 }
 #[napi]

@@ -24,7 +24,6 @@ const sharedMemory = require('share-memory')
 
 const stringLink = "string.link" // 设置一个内存id memoryId
 
-sharedMemory.init() // 初始化 sharedMemory
 sharedMemory.setString(stringLink, "shared String") // 使用该内存 id 存储需要共享的字符串
 console.log('Read shared string in parent process', sharedMemory.getString(stringLink))
 const child = fork('./child')
@@ -72,8 +71,6 @@ const { fork } = require('child_process')
 const sharedMemory = require('share-memory')
 
 const stringLink = "string.link" // Set a memory id memoryId
-
-sharedMemory.init() // Initialize sharedMemory
 sharedMemory.setString(stringLink, "shared String") // Store the string to be shared using the memory id
 console.log('Read shared string in parent process', sharedMemory.getString(stringLink))
 const child = fork('./child')
