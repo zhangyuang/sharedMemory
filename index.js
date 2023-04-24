@@ -252,9 +252,11 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { getString, setString, init, clear } = nativeBinding
+const { getString, setString, init, clear, getObject, setObject } = nativeBinding
 
 module.exports.getString = getString
 module.exports.setString = setString
 module.exports.init = init
 module.exports.clear = clear
+module.exports.getObject = getObject
+module.exports.setObject = setObject
