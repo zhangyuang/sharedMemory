@@ -19,5 +19,6 @@ sharedMemory.init()
 //   }
 // })
 
-sharedMemory.setObject('object.link', {foo:'bar'})
-console.log(sharedMemory.getObject('object.link'))
+sharedMemory.setObject('string.link', { foo: 'bar' })
+// const foo = sharedMemory.getObject('string.link')
+// console.log(foo)
